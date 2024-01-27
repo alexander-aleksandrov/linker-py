@@ -17,9 +17,20 @@ class Stemmer:
         self.superlative = ['ейше', 'ейш']
         self.derivational = ['ость', 'ост']
         self.group_ending = ['а','я']
+        self.noun_suffixes = ['иант', 'ионн', 'еньк', 'оньк', 'тел', 'енк', 'ечк', 'очк', 'ушк', 'юшк', 'ичк', 'ишк', 'ышк', 'щик', 'щиц', 'ник', 'ион', 'иат', 'иут', 'ищ', 'иш', 'иц', 'ок', 'от', 'нк', 'ск', 'ик', 'иц', 'к',]
+        self.adj_suffixes = ['оват', 'еват', 'чив', 'лив', 'ист', 'льн', 'ск', 'ущ', 'ин']
     
 def main():
-    print(stemm("понятий"))
+    normalized_text = ""
+    with open("files/test.txt", "r", encoding="utf-8") as f:
+        text = f.read()
+        for line in text.split("\n"):
+            for word in line.split():
+                normalized_text += normalize(word) + " "
+            normalized_text += "\n"
+    with open("files/test_normalized.txt", "w", encoding="utf-8") as f:
+        f.write(normalized_text)
+    print("Done")
     
 
 def stemm(word):
@@ -53,8 +64,6 @@ def stemm(word):
                     f.write(word+"\n")
             except Exception as e:
                 print("Error writing to file")                  
-            print(word)
-            print(e)
             return word
     return prefix+rv
 
@@ -71,7 +80,11 @@ def step_1(word):
             return step_2(word[:-len(ending)])
     for ending in Stemmer().adjective:
         if word.endswith(ending):
-            return step_2(word[:-len(ending)])
+            word_adj = word[:-len(ending)]
+            for ending in Stemmer().adj_suffixes:
+                if word_adj.endswith(ending):
+                    return step_2(word_adj[:-len(ending)])
+            return step_2(word_adj)
     for ending in Stemmer().verb_gr1:
         if word.endswith(ending) and word[-len(ending)-1] in Stemmer().group_ending:
             return step_2(word[:-len(ending)])
@@ -80,7 +93,11 @@ def step_1(word):
             return step_2(word[:-len(ending)])
     for ending in Stemmer().noun:
         if word.endswith(ending):
-            return step_2(word[:-len(ending)])
+            word_noun = word[:-len(ending)]
+            for ending in Stemmer().noun_suffixes:
+                if word_noun.endswith(ending):
+                    return step_2(word_noun[:-len(ending)])
+            return step_2(word_noun)
     return step_2(word)
 
 def step_2(word):
@@ -92,10 +109,11 @@ def step_2(word):
 def step_3(word):
     for ending in Stemmer().participle_gr1:
         if word.endswith(ending) and word[-len(ending)-1] in Stemmer().group_ending:
-            return step_4(word[:-len(ending)])
+            return step_4(word[:-len(ending)-1])
     for ending in Stemmer().participle_gr2:
         if word.endswith(ending):
             return step_4(word[:-len(ending)])
+    
     for ending in Stemmer().derivational:
         if word.endswith(ending):
             return step_4(word[:-len(ending)])

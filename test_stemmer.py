@@ -26,7 +26,8 @@ def test_stemm_small_words(test_input, expected):
 @pytest.mark.parametrize("test_input,expected", [
     ("напоминавшая", "напомина"),
     ("чакральный", "чакр"),
-    ("чакра", "чакр")
+    ("чакра", "чакр"),
+    ("прочитавший","прочит")
 
 
 ])
