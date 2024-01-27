@@ -1,3 +1,5 @@
+from stemmer import normalize
+
 def test_function_1():
     ...
 
