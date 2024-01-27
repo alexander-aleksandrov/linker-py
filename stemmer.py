@@ -87,7 +87,7 @@ def step_1(word):
             return step_2(word_adj)
     for ending in Stemmer().verb_gr1:
         if word.endswith(ending) and word[-len(ending)-1] in Stemmer().group_ending:
-            return step_2(word[:-len(ending)])
+            return step_2(word[:-len(ending)-1])
     for ending in Stemmer().verb_gr2:
         if word.endswith(ending):
             return step_2(word[:-len(ending)])

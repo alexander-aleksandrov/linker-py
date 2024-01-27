@@ -5,6 +5,7 @@ def main():
     folder = "testVault" 
     file_names = get_file_names(folder)
     change_file_names(file_names, folder)
+    print("Done")
 
 
 def get_file_names(path):
