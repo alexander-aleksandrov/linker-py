@@ -16,6 +16,7 @@ def main():
 #Get all files in the directory
 def get_file_names(path):
     file_names = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+    file_names = [f for f in file_names if is_valid(f)] 
     file_names = sorted(file_names, key=len, reverse=True)
     return file_names
 
@@ -23,14 +24,14 @@ def get_file_names(path):
 def normalize_file_names(file_names): 
     norm_names = {}
     for name in file_names:
-        if is_valid(name):
-            clean_name = name.replace("-", " ").lower()[:-3]
-            word_list = clean_name.split()            
+        clean_name = name.replace("-", " ").lower()[:-3]
+        word_list = clean_name.split()   
+        if len(word_list) > 1:             
             for i in range(len(word_list)):
                 word_list[i] = normalize(word_list[i])
             norm_names[name] = word_list
         else:
-            continue
+            norm_names[name] = word_list
     return norm_names
 
 def link_all(file_dict, path):
