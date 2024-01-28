@@ -39,7 +39,7 @@ def stemm(word):
     for i in range(len(word)):
         if word[i] == "ё":
             word = word[:i] + "е" + word[i+1:]
-            word = word.lower().strip()
+        word = word.lower().strip()
     if is_exclution(word):
         return word
     prefix = ""
@@ -159,26 +159,6 @@ def is_valid(word):
 def is_vowel(ch):
     consonants = "бвгджзйклмнпрстфхцчшщъь"
     return True if ch not in consonants else False
-
-def is_plural(word):
-    ...
-    #detect word langauge
-
-def is_feminine(word):
-    ...
-    #detect word langauge
-
-def is_masculine(word):
-    ...
-    #detect word langauge   
-
-def is_neuter(word):
-    ...
-    #detect word langauge
-
-def is_singular(word):
-    ...
-    #detect word langauge
 
 if __name__ == "__main__":
     main()
