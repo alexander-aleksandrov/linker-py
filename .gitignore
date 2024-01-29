@@ -10,6 +10,7 @@ __pycache__/
 .Python
 build/
 testVault/
+testVault copy/
 develop-eggs/
 dist/
 downloads/
