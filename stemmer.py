@@ -4,7 +4,7 @@ import word
 
 class Stemmer:
     def __init__(self):
-        #Setup dictionaries for stemming words
+        #Setup dictionaries for stemming words of different parts of speech of russian language
         self.noun = ['иями', 'ями', 'ами', 'ией', 'иям', 'ием', 'иях', 'ев', 'ов', 'ие', 'ье', 'еи', 'ии', 'ей', 'ой', 'ий', 'ям', 'ем', 'ам', 'ом', 'ах', 'ях', 'ию', 'ью', 'ия', 'ья', 'а', 'е', 'и', 'й', 'о', 'у', 'ы', 'ь', 'ю', 'я']
         self.verb_gr1 = ['ете', 'йте', 'ешь', 'нно', 'ла', 'на', 'ли', 'ем', 'ло', 'но', 'ет', 'ют', 'ны', 'ть', 'й', 'л', 'н']
         self.verb_gr2 = ['ейте', 'уйте', 'ила', 'ыла', 'ена', 'ите', 'или', 'ыли', 'ило', 'ыло', 'ено', 'ует', 'уют', 'ены', 'ить', 'ыть', 'ишь', 'ей', 'уй', 'ил', 'ыл', 'им', 'ым', 'ен', 'ят', 'ит', 'ыт', 'ую', 'ю']
@@ -18,19 +18,10 @@ class Stemmer:
         self.derivational = ['ость', 'ост']
         self.group_ending = ['а','я']
         self.noun_suffixes = ['иант', 'ионн', 'еньк', 'оньк', 'тел', 'енк', 'ечк', 'очк', 'ушк', 'юшк', 'ичк', 'ишк', 'ышк', 'щик', 'щиц', 'ник', 'ион', 'иат', 'иут', 'ищ', 'иш', 'иц', 'ок', 'от', 'нк', 'ск', 'ик', 'иц', 'к',]
-        self.adj_suffixes = ['оват', 'еват', 'чив', 'лив', 'ист', 'льн', 'ск', 'ущ', 'ин']
+        self.adj_suffixes = ['оват', 'еват', 'альн', 'ельн', 'ильн', 'ольн', 'юльн', 'ульн', 'чив', 'лив', 'ист', 'ьн', 'ск', 'ущ', 'ин']
     
 def main():
-    normalized_text = ""
-    with open("files/test.txt", "r", encoding="utf-8") as f:
-        text = f.read()
-        for line in text.split("\n"):
-            for word in line.split():
-                normalized_text += normalize(word) + " "
-            normalized_text += "\n"
-    with open("files/test_normalized.txt", "w", encoding="utf-8") as f:
-        f.write(normalized_text)
-    print("Done")
+    print(stemm("ключики"))
     
 
 def stemm(word):
@@ -97,8 +88,15 @@ def step_1(word):
             for ending in Stemmer().noun_suffixes:
                 if word_noun.endswith(ending):
                     return step_2(word_noun[:-len(ending)])
-            return step_2(word_noun)
-    return step_2(word)
+            else:
+                return step_2(word_noun)    
+    else: 
+        word_noun = word
+        for ending in Stemmer().noun_suffixes:
+            if word_noun.endswith(ending):
+                return step_2(word_noun[:-len(ending)])
+        else:
+            return step_2(word_noun)   
 
 def step_2(word):
     if word.endswith("и"):
@@ -134,11 +132,7 @@ def step_4(word):
         return word[:-1]
     else:
         return word
-        
 
-def normalize(word):
-    word = stemm(word)
-    return word
 
 def is_exclution(word):
     with open("files/exclutions.txt", "r", encoding="utf-8") as f:

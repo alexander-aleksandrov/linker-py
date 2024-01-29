@@ -1,4 +1,4 @@
-from stemmer import normalize
+from stemmer import stemm
 import os
 import re
 
@@ -28,18 +28,19 @@ def normalize_file_names(file_names):
         word_list = clean_name.split()   
         if len(word_list) > 1:             
             for i in range(len(word_list)):
-                word_list[i] = normalize(word_list[i])
+                word_list[i] = stemm(word_list[i])
             norm_names[name] = word_list
         else:
             norm_names[name] = word_list
     return norm_names
 
 def link_all(file_dict, path):
-    orig_text = open(path, "r", encoding="utf-8").read()
+    with open(path, "r", encoding="utf-8") as f:
+        orig_text = f.read()
     for file_name in file_dict:
         pattern = ""
-        for word in file_dict[file_name]:
-            pattern += fr"{word}[а-я]*\s+"      
+        for stemmed_word in file_dict[file_name]:
+            pattern += fr"{stemmed_word}[а-я]*\s+"      
         matches = re.findall(pattern, orig_text)
         matches = list(dict.fromkeys(matches))
         for match in matches:
