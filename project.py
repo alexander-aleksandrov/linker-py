@@ -38,15 +38,19 @@ def link_all(file_dict, path):
     with open(path, "r", encoding="utf-8") as f:
         orig_text = f.read()
     for file_name in file_dict:
+        if file_name == path.split("/")[1]:
+            continue
         pattern = ""
         for stemmed_word in file_dict[file_name]:
-            pattern += fr"{stemmed_word}[а-я]*\s+"      
-        matches = re.findall(pattern, orig_text)
-        matches = list(dict.fromkeys(matches))
+            pattern += fr"{stemmed_word}[а-я]*\s+"
+        text_without_punctuations = re.sub(r"[^\w\s]", "", orig_text)         
+        matches = re.findall(pattern, text_without_punctuations)
+        matches = sorted(list(dict.fromkeys(matches)), key=len, reverse=True)
+        file_name = file_name[:-3]
         for match in matches:
             match = match.strip()
-            file_name = file_name[:-3]
-            orig_text = replace_outside_brackets(orig_text, match, f"[[{file_name}|{match}]]")
+            replacement = f"[[{file_name}|{match}]]"
+            orig_text = replace_outside_brackets(orig_text, match, replacement)
     with open(path, "w", encoding="utf-8") as f:
         f.write(orig_text)
         print(f"Linked - {path}")

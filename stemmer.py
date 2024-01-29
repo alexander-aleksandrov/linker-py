@@ -1,6 +1,4 @@
 import re
-import csv
-import word
 
 class Stemmer:
     def __init__(self):
@@ -21,7 +19,7 @@ class Stemmer:
         self.adj_suffixes = ['оват', 'еват', 'альн', 'ельн', 'ильн', 'ольн', 'юльн', 'ульн', 'чив', 'лив', 'ист', 'ьн', 'ск', 'ущ', 'ин']
     
 def main():
-    print(stemm("ключики"))
+    print(stemm("машина"))
     
 
 def stemm(word):
