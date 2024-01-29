@@ -37,6 +37,7 @@ def normalize_file_names(file_names):
 def link_all(file_dict, path):
     with open(path, "r", encoding="utf-8") as f:
         orig_text = f.read()
+    counter = 0    
     for file_name in file_dict:
         if file_name == path.split("/")[1]:
             continue
@@ -51,9 +52,11 @@ def link_all(file_dict, path):
             match = match.strip()
             replacement = f"[[{file_name}|{match}]]"
             orig_text = replace_outside_brackets(orig_text, match, replacement)
+            counter += 1
     with open(path, "w", encoding="utf-8") as f:
         f.write(orig_text)
-        print(f"Linked - {path}")
+        print(f"Linked {counter} times - {path}")
+        
                 
 def replace_outside_brackets(text, match, replacement):
     brackets_pattern = r"\[\[.*?\]\]"
